@@ -1,6 +1,7 @@
--- Allergeni (i 14 previsti dalla normativa UE) e nuove categorie del menù.
+-- Allergeni (i 14 previsti dalla normativa UE), categorie del menù e tavoli.
+-- NECESSARIO (non sono dati di prova). Si può eseguire più volte senza errori.
 
-CREATE TABLE allergens (
+CREATE TABLE IF NOT EXISTS allergens (
     id          SERIAL PRIMARY KEY,
     code        VARCHAR(30) NOT NULL UNIQUE,   -- anche nome del file icona: public/assets/img/allergens/<code>.svg
     name        VARCHAR(80) NOT NULL,
@@ -8,7 +9,7 @@ CREATE TABLE allergens (
     sort_order  INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE dish_allergens (
+CREATE TABLE IF NOT EXISTS dish_allergens (
     dish_id      INTEGER NOT NULL REFERENCES dishes(id) ON DELETE CASCADE,
     allergen_id  INTEGER NOT NULL REFERENCES allergens(id) ON DELETE RESTRICT,
     PRIMARY KEY (dish_id, allergen_id)
@@ -28,12 +29,22 @@ INSERT INTO allergens (code, name, icon, sort_order) VALUES
     ('sesame',      'Sesamo',           NULL, 11),
     ('sulphites',   'Solfiti',          '🍷', 12),
     ('lupin',       'Lupini',           NULL, 13),
-    ('molluscs',    'Molluschi',        '🐚', 14);
+    ('molluscs',    'Molluschi',        '🐚', 14)
+ON CONFLICT (code) DO NOTHING;
 
--- Nuove categorie e ordine di visualizzazione
-INSERT INTO categories (name, sort_order) VALUES
-    ('Contorni', 0),
-    ('Alcolici', 0);
+-- Le sette sezioni del menù, nell'ordine in cui appaiono
+INSERT INTO categories (name, sort_order)
+SELECT v.name, v.ord
+FROM (VALUES
+    ('Antipasti', 1),
+    ('Primi',     2),
+    ('Secondi',   3),
+    ('Contorni',  4),
+    ('Dolci',     5),
+    ('Bevande',   6),
+    ('Alcolici',  7)
+) AS v(name, ord)
+WHERE NOT EXISTS (SELECT 1 FROM categories c WHERE c.name = v.name);
 
 UPDATE categories SET sort_order = CASE name
     WHEN 'Antipasti' THEN 1
@@ -45,3 +56,8 @@ UPDATE categories SET sort_order = CASE name
     WHEN 'Alcolici'  THEN 7
     ELSE sort_order
 END;
+
+-- Tavoli da 1 a 10 (cambia 10 con il numero di tavoli che avete)
+INSERT INTO tables (number)
+SELECT n FROM generate_series(1, 10) AS n
+ON CONFLICT (number) DO NOTHING;

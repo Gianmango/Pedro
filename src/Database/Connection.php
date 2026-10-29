@@ -22,7 +22,7 @@ final class Connection
                 'pgsql:host=%s;port=%s;dbname=%s',
                 env('DB_HOST', 'db'),
                 env('DB_PORT', '5432'),
-                env('DB_NAME', 'Pedro')
+                env('DB_NAME', 'agriturismo')
             );
 
             self::$pdo = new PDO($dsn, env('DB_USER'), env('DB_PASSWORD'), [

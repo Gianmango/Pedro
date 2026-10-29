@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+use App\Controllers\AdminController;
+use App\Controllers\AdminMenuController;
+use App\Controllers\AuthController;
 use App\Controllers\MediaController;
 use App\Controllers\MenuController;
 use App\Database\Connection;
@@ -10,11 +13,26 @@ use App\Router;
 // Formato: $router->get('/percorso', [NomeController::class, 'metodo']);
 return function (Router $router): void {
 
-    // Menù per i clienti (nessun login)
+    // ---- Clienti (nessun login) ----
     $router->get('/', [MenuController::class, 'index']);
 
     // Foto dei piatti, salvate in storage/uploads/
     $router->get('/uploads/{filename}', [MediaController::class, 'show']);
+
+    // ---- Area admin (tutto sotto /admin, tranne il login, richiede l'accesso) ----
+    $router->get('/admin/login',   [AuthController::class, 'showLogin']);
+    $router->post('/admin/login',  [AuthController::class, 'login']);
+    $router->post('/admin/logout', [AuthController::class, 'logout']);
+
+    $router->get('/admin',        [AdminController::class, 'index']);
+    $router->get('/admin/tables', [AdminController::class, 'tables']);
+
+    $router->get('/admin/menu',              [AdminMenuController::class, 'index']);
+    $router->get('/admin/menu/new',          [AdminMenuController::class, 'create']);
+    $router->post('/admin/menu',             [AdminMenuController::class, 'store']);
+    $router->get('/admin/menu/{id}/edit',    [AdminMenuController::class, 'edit']);
+    $router->post('/admin/menu/{id}',        [AdminMenuController::class, 'update']);
+    $router->post('/admin/menu/{id}/delete', [AdminMenuController::class, 'destroy']);
 
     // Controllo rapido che PHP riesca a parlare con il database.
     // Apri /health: devi vedere {"status":"ok"}
@@ -30,5 +48,5 @@ return function (Router $router): void {
         }
     });
 
-    // Prossimi passi: /t/{number} (tavolo), /cart, /admin/... (solo l'area admin avrà il login)
+    // Prossimi passi: /t/{number} (tavolo), /cart, ordini in cucina e cassa
 };

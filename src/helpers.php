@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Piccole funzioni di utilità usate ovunque (caricate da public/index.php).
+// Piccole funzioni di utilità usate ovunque (caricate da src/bootstrap.php).
 
 /** Legge una variabile d'ambiente (.env passato al container). */
 function env(string $key, ?string $default = null): ?string
@@ -69,4 +69,78 @@ function dish_image_url(?string $imagePath): ?string
     }
 
     return '/uploads/' . rawurlencode($name);
+}
+
+/** Manda il browser su un'altra pagina e ferma lo script. */
+function redirect(string $path): never
+{
+    header('Location: ' . $path);
+    exit;
+}
+
+// ---------- Protezione CSRF ----------
+// Ogni form POST deve contenere csrf_field() (stampa un campo nascosto con il token).
+// Il Router rifiuta i POST senza token valido.
+// ATTENZIONE: in un commento "//" non scrivere mai la chiusura del tag PHP, la interpreta come fine del codice.
+
+function csrf_token(): string
+{
+    if (empty($_SESSION['_csrf'])) {
+        $_SESSION['_csrf'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['_csrf'];
+}
+
+function csrf_field(): string
+{
+    return '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">';
+}
+
+function csrf_valid(): bool
+{
+    $sent  = $_POST['_csrf'] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+    $known = $_SESSION['_csrf'] ?? '';
+
+    return is_string($sent) && is_string($known) && $known !== '' && hash_equals($known, $sent);
+}
+
+// ---------- Messaggi "flash" (si vedono una sola volta, dopo un redirect) ----------
+
+function flash(string $type, string $message): void
+{
+    $_SESSION['_flash'][] = [$type, $message];
+}
+
+/** @return array<int, array{0:string,1:string}> */
+function flash_pull(): array
+{
+    $messages = $_SESSION['_flash'] ?? [];
+    unset($_SESSION['_flash']);
+
+    return $messages;
+}
+
+// ---------- Formattazione per le pagine admin ----------
+
+/** "2026-10-29 21:04:12+00" -> "22:04" (ora italiana). */
+function format_time(string $timestamp): string
+{
+    try {
+        return (new DateTimeImmutable($timestamp))
+            ->setTimezone(new DateTimeZone('Europe/Rome'))
+            ->format('H:i');
+    } catch (Exception) {
+        return '';
+    }
+}
+
+/** Stato dell'ordine in italiano. */
+function order_status_label(string $status): string
+{
+    return [
+        'new'       => 'Nuovo',
+        'preparing' => 'In preparazione',
+        'served'    => 'Servito',
+        'paid'      => 'Pagato',
+    ][$status] ?? $status;
 }

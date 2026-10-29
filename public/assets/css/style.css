@@ -169,3 +169,161 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
 .allergen-list .allergen { width: 2rem; height: 2rem; font-size: 1.1rem; }
 
 .menu-note { margin-top: 2rem; color: #666; font-size: .9rem; text-align: center; }
+
+/* =====================================================================
+   Area admin
+   ===================================================================== */
+.admin-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem 1rem;
+    padding: .6rem 1rem;
+    background: #3f5b3a;
+    color: #fff;
+}
+.admin-bar__brand { color: #fff; font-size: 1.1rem; font-weight: 700; text-decoration: none; }
+.admin-bar nav { display: flex; flex: 1; gap: .25rem; }
+.admin-bar nav a {
+    padding: .4rem .8rem;
+    border-radius: 8px;
+    color: #e8efe5;
+    text-decoration: none;
+}
+.admin-bar nav a.is-active { background: rgb(255 255 255 / .18); color: #fff; font-weight: 600; }
+.admin-bar form { margin: 0; }
+.link-button {
+    padding: .4rem;
+    border: 0;
+    background: none;
+    color: #e8efe5;
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.admin-main { max-width: 960px; margin: 0 auto; padding: 1.2rem 1rem 3rem; }
+.admin-main h1 { margin: 0 0 1rem; color: #3f5b3a; font-size: 1.5rem; }
+.admin-main h2 { color: #3f5b3a; }
+.muted { color: #666; }
+
+.page-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem 1rem;
+    margin-bottom: 1rem;
+}
+.page-head h1, .page-head p { margin: 0; }
+
+.flash { margin: 0 0 1rem; padding: .7rem 1rem; border-radius: 10px; }
+.flash--ok    { background: #e3f1de; color: #264a1d; }
+.flash--error { background: #fbe4e1; color: #7a1d12; }
+
+/* Bottoni */
+.btn {
+    display: inline-block;
+    padding: .55rem 1rem;
+    border: 1px solid #cfc6b0;
+    border-radius: 10px;
+    background: #fff;
+    color: #2b2b2b;
+    font: inherit;
+    font-size: .95rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+.btn--primary { border-color: #3f5b3a; background: #3f5b3a; color: #fff; font-weight: 600; }
+.btn--danger  { border-color: #c4473a; color: #b3261e; }
+.btn:focus-visible, .link-button:focus-visible { outline: 2px solid #3f5b3a; outline-offset: 2px; }
+
+.badge {
+    display: inline-block;
+    padding: .1rem .55rem;
+    border-radius: 999px;
+    background: #ece6d6;
+    font-size: .75rem;
+    font-weight: 600;
+}
+.badge--warn { background: #fde9c4; color: #7a4b00; }
+
+/* Pannello iniziale */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.tile {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    padding: 1.4rem;
+    border: 1px solid #e0d8c5;
+    border-radius: 14px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+}
+.tile:hover { border-color: #3f5b3a; }
+.tile__icon { font-size: 2rem; }
+.tile__title { font-size: 1.2rem; font-weight: 700; color: #3f5b3a; }
+.tile__sub { color: #666; font-size: .9rem; }
+
+/* Tavoli */
+.table-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1rem; align-items: start; }
+.table-card { padding: 1rem; border: 1px solid #e0d8c5; border-radius: 14px; background: #fff; }
+.table-card--open { border-color: #3f5b3a; box-shadow: 0 0 0 1px #3f5b3a inset; }
+.table-card h2 { margin: 0 0 .4rem; font-size: 1.1rem; }
+.table-card h2 small { margin-left: .4rem; color: #777; font-weight: 400; }
+.table-card__total { margin: 0 0 .4rem; font-size: 1.6rem; font-weight: 700; }
+.table-card__free { margin: 0; color: #888; }
+.table-card summary { cursor: pointer; color: #3f5b3a; font-weight: 600; }
+.order { margin-top: .7rem; padding-top: .6rem; border-top: 1px dashed #d9d1bf; }
+.order__head { margin: 0 0 .3rem; font-size: .85rem; color: #555; }
+.order ul { margin: 0; padding: 0; list-style: none; }
+.order li { display: flex; justify-content: space-between; gap: .6rem; padding: .15rem 0; font-size: .92rem; }
+
+/* Elenco piatti admin */
+.admin-category { margin-bottom: 1.5rem; }
+.admin-category h2 { margin: 1rem 0 .25rem; padding-bottom: .25rem; border-bottom: 2px solid #3f5b3a; }
+.admin-dishes { margin: 0; padding: 0; list-style: none; }
+.admin-dish { display: flex; align-items: center; gap: .8rem; padding: .7rem 0; border-bottom: 1px solid #e6e0d4; }
+.admin-dish--hidden { opacity: .65; }
+.admin-dish__info { display: flex; flex: 1; flex-wrap: wrap; align-items: center; gap: .3rem .7rem; min-width: 0; }
+.admin-dish__info strong { flex-basis: 100%; }
+.admin-dish__actions { display: flex; flex: none; gap: .4rem; }
+.admin-dish__actions form { margin: 0; }
+@media (max-width: 560px) {
+    .admin-dish { flex-wrap: wrap; }
+    .admin-dish__actions { width: 100%; }
+}
+
+/* Form */
+.card { padding: 1.2rem; border: 1px solid #e0d8c5; border-radius: 14px; background: #fff; }
+.form { display: grid; gap: 1rem; }
+.form--narrow { max-width: 380px; margin: 2rem auto; }
+.form--narrow h1 { margin: 0; font-size: 1.3rem; }
+.form label { display: grid; gap: .3rem; font-weight: 600; font-size: .95rem; }
+.form input:not([type="checkbox"]):not([type="file"]),
+.form select,
+.form textarea {
+    width: 100%;
+    padding: .6rem .7rem;
+    border: 1px solid #cfc6b0;
+    border-radius: 8px;
+    background: #fff;
+    color: inherit;
+    font: inherit;
+    font-size: 1rem; /* 16px: evita lo zoom automatico su iPhone */
+    font-weight: 400;
+}
+.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 560px) { .form__row { grid-template-columns: 1fr; } }
+.form fieldset { margin: 0; padding: .8rem 1rem 1rem; border: 1px solid #e0d8c5; border-radius: 10px; }
+.form legend { padding: 0 .4rem; font-weight: 700; color: #3f5b3a; }
+.form__actions { display: flex; gap: .6rem; }
+.field-error { color: #b3261e; font-size: .85rem; font-weight: 600; }
+
+.checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .5rem; }
+.form .check { display: flex; align-items: center; gap: .5rem; font-weight: 400; cursor: pointer; }
+.check input { width: 1.1rem; height: 1.1rem; }
+
+.photo-current { display: flex; align-items: center; gap: 1rem; margin-bottom: .8rem; }
+.photo-current img { border-radius: 10px; object-fit: cover; }

@@ -1,0 +1,4 @@
+</main>
+<script src="<?= e(asset('js/admin.js')) ?>" defer></script>
+</body>
+</html>

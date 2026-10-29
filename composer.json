@@ -1,6 +1,6 @@
 {
-    "name": "Pedro/ordini",
-    "description": "Ordini al tavolo e gestione menù per l'Pedro",
+    "name": "agriturismo/ordini",
+    "description": "Ordini al tavolo e gestione menù per l'agriturismo",
     "type": "project",
     "require": {
         "php": ">=8.1",

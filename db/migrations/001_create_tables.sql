@@ -1,4 +1,4 @@
--- Schema iniziale per menù e ordini dell'Pedro (PostgreSQL).
+-- Schema iniziale per menù e ordini dell'agriturismo (PostgreSQL).
 -- Gli importi sono sempre in centesimi (INTEGER): niente errori di arrotondamento.
 
 CREATE TABLE categories (

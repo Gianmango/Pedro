@@ -7,6 +7,7 @@ namespace App;
  * Router minimale.
  *   $router->get('/t/{number}', [TableController::class, 'show']);
  * I valori tra graffe arrivano al metodo come argomenti, nell'ordine in cui compaiono.
+ * Tutte le richieste POST devono avere un token CSRF valido (vedi csrf_field() in helpers.php).
  */
 final class Router
 {
@@ -42,6 +43,10 @@ final class Router
                 continue;
             }
             if (preg_match($regex, $path, $matches)) {
+                if ($method === 'POST' && !csrf_valid()) {
+                    $this->csrfFailed();
+                    return;
+                }
                 $params = array_values(array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY));
                 $this->call($handler, $params);
                 return;
@@ -64,5 +69,13 @@ final class Router
     {
         http_response_code(404);
         view('errors/404');
+    }
+
+    private function csrfFailed(): void
+    {
+        http_response_code(419);
+        // Se il file inviato supera post_max_size, PHP svuota $_POST: il token sembra mancare.
+        $tooBig = empty($_POST) && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0;
+        view('errors/419', ['tooBig' => $tooBig]);
     }
 }
