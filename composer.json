@@ -1,0 +1,15 @@
+{
+    "name": "Pedro/ordini",
+    "description": "Ordini al tavolo e gestione menù per l'Pedro",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo": "*",
+        "ext-pdo_pgsql": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

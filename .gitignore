@@ -1,5 +1,7 @@
 .env
-.env.*
-!.env.example
-/vendor/
-/storage/uploads/
+vendor/
+storage/uploads/*
+!storage/uploads/.gitkeep
+.DS_Store
+.idea/
+.vscode/
