@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Controllers\AdminController;
+use App\Controllers\AdminAccountController;
 use App\Controllers\AdminMenuController;
 use App\Controllers\AuthController;
 use App\Controllers\MediaController;
@@ -26,6 +27,8 @@ return function (Router $router): void {
     $router->post('/admin/logout', [AuthController::class, 'logout']);
 
     $router->get('/admin',        [AdminController::class, 'index']);
+    $router->get('/admin/account', [AdminAccountController::class, 'edit']);
+    $router->post('/admin/account', [AdminAccountController::class, 'update']);
     $router->get('/admin/tables', [AdminController::class, 'tables']);
     $router->post('/admin/tables', [AdminController::class, 'addTables']);
     // Ordini al tavolo

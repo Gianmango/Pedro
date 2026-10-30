@@ -20,6 +20,16 @@ final class Auth
         return (string) ($_SESSION['admin_name'] ?? '');
     }
 
+    public static function id(): ?int
+    {
+        return isset($_SESSION['admin_id']) ? (int) $_SESSION['admin_id'] : null;
+    }
+
+    public static function updateUsername(string $username): void
+    {
+        $_SESSION['admin_name'] = $username;
+    }
+
     /** Se non sei loggato ti manda al login e ferma lo script. */
     public static function require(): void
     {

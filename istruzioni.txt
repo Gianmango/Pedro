@@ -1,0 +1,3 @@
+crea .env con DB_NAME, DB_USER, DB_PASSWORD
+docker compose up --build -d
+docker compose exec php php bin/create-admin.php NOMEADMIN

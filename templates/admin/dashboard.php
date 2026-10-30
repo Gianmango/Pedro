@@ -13,8 +13,11 @@
         <span class="tile__title">Modifica menù</span>
         <span class="tile__sub">Aggiungi, modifica o elimina i piatti</span>
     </a>
+    <a class="tile" href="/admin/account">
+        <span class="tile__icon" aria-hidden="true">👤</span>
+        <span class="tile__title">Account amministratore</span>
+        <span class="tile__sub">Cambia nome utente o password</span>
+    </a>
 </div>
-
-<p class="muted"><a href="/">Apri il menù come lo vedono i clienti</a></p>
 
 <?php require base_path('templates/admin/partials/footer.php'); ?>

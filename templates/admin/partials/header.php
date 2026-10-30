@@ -15,6 +15,7 @@
         <nav aria-label="Navigazione admin">
             <a href="/admin/tables" class="<?= ($active ?? '') === 'tables' ? 'is-active' : '' ?>">Tavoli</a>
             <a href="/admin/menu" class="<?= ($active ?? '') === 'menu' ? 'is-active' : '' ?>">Menù</a>
+            <a href="/admin/account" class="<?= ($active ?? '') === 'account' ? 'is-active' : '' ?>">Account</a>
         </nav>
         <form method="post" action="/admin/logout">
             <?= csrf_field() ?>
