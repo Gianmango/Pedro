@@ -5,7 +5,6 @@ use App\Controllers\AdminController;
 use App\Controllers\AdminMenuController;
 use App\Controllers\AuthController;
 use App\Controllers\MediaController;
-use App\Controllers\MenuController;
 use App\Database\Connection;
 use App\Router;
 use App\Controllers\AdminTableController;
@@ -14,8 +13,9 @@ use App\Controllers\AdminTableController;
 // Formato: $router->get('/percorso', [NomeController::class, 'metodo']);
 return function (Router $router): void {
 
-    // ---- Clienti (nessun login) ----
-    $router->get('/', [MenuController::class, 'index']);
+    $router->get('/', static function (): void {
+        redirect('/admin');
+    });
 
     // Foto dei piatti, salvate in storage/uploads/
     $router->get('/uploads/{filename}', [MediaController::class, 'show']);

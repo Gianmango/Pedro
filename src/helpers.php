@@ -28,7 +28,7 @@ function base_path(string $path = ''): string
     return dirname(__DIR__) . ($path !== '' ? '/' . ltrim($path, '/') : '');
 }
 
-/** Mostra un template: view('client/menu', ['menu' => $menu]); */
+/** Mostra un template: view('admin/menu', ['menu' => $menu]); */
 function view(string $template, array $data = []): void
 {
     $file = base_path('templates/' . $template . '.php');
