@@ -6,6 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title><?= e(($title ?? 'Admin') . ' · Admin') ?></title>
     <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
+    <link rel="stylesheet" href="<?= e(asset('css/orders.css')) ?>">
 </head>
 <body class="admin">
 <header class="admin-bar">

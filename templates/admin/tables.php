@@ -5,6 +5,17 @@
     <p class="muted">Conti aperti in totale: <strong><?= e(format_price((int) $grandTotal)) ?></strong></p>
 </div>
 
+<form method="post" action="/admin/tables" class="card form table-create">
+    <?= csrf_field() ?>
+    <label for="table-count">Aggiungi tavoli
+        <input id="table-count" type="number" name="count" min="1" max="50" step="1" value="1" required>
+    </label>
+    <p class="muted">Verranno assegnati i numeri successivi all'ultimo tavolo esistente (massimo 50 per volta).</p>
+    <div class="form__actions">
+        <button class="btn btn--primary">Aggiungi</button>
+    </div>
+</form>
+
 <?php if (empty($tables)): ?>
     <p class="empty">Nessun tavolo configurato.</p>
 <?php endif; ?>
@@ -14,7 +25,7 @@
         <?php $isOpen = $table['open_orders'] > 0; ?>
         <section class="table-card <?= $isOpen ? 'table-card--open' : '' ?>">
             <h2>
-                Tavolo <?= e((string) $table['number']) ?>
+                <a class="table-card__link" href="/admin/tables/<?= (int) $table['number'] ?>">Tavolo <?= e((string) $table['number']) ?></a>
                 <?php if (!empty($table['label'])): ?><small><?= e($table['label']) ?></small><?php endif; ?>
             </h2>
 
@@ -48,6 +59,9 @@
             <?php else: ?>
                 <p class="table-card__free">Nessun conto aperto</p>
             <?php endif; ?>
+            <a class="btn table-card__open" href="/admin/tables/<?= (int) $table['number'] ?>">
+                <?= $isOpen ? 'Apri carrello' : 'Prendi ordine' ?>
+            </a>
         </section>
     <?php endforeach; ?>
 </div>

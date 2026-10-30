@@ -7,6 +7,40 @@ use App\Database\Connection;
 
 final class Table
 {
+    /** @return array{first:int, last:int} numeri assegnati */
+    public static function addNext(int $count): array
+    {
+        $pdo = Connection::get();
+        $pdo->beginTransaction();
+
+        try {
+            $pdo->exec('LOCK TABLE tables IN EXCLUSIVE MODE');
+            $first = (int) $pdo->query('SELECT COALESCE(MAX(number), 0) + 1 FROM tables')->fetchColumn();
+            $insert = $pdo->prepare('INSERT INTO tables (number) VALUES (:number)');
+
+            for ($number = $first; $number < $first + $count; $number++) {
+                $insert->execute(['number' => $number]);
+            }
+
+            $pdo->commit();
+
+            return ['first' => $first, 'last' => $first + $count - 1];
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    /** @return array{id:int, number:int, label:?string}|null */
+    public static function findByNumber(int $number): ?array
+    {
+        $stmt = Connection::get()->prepare('SELECT id, number, label FROM tables WHERE number = :n');
+        $stmt->execute(['n' => $number]);
+        $row = $stmt->fetch();
+
+        return $row ?: null;
+    }
+
     /**
      * Tutti i tavoli con il conto ancora da pagare (ordini non 'paid').
      * Ogni tavolo ha: number, label, open_orders, total_cents e 'orders' (con le righe ordinate).

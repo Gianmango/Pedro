@@ -24,8 +24,7 @@
                     ?>
                     <li class="dish">
 
-                        <!-- Riga del piatto: toccandola si apre il dettaglio -->
-                        <!-- (passo 5: qui accanto vanno prezzo e bottone "aggiungi") -->
+                        <!-- Toccando la riga si apre il dettaglio del piatto. -->
                         <button type="button" class="dish__open" data-dialog="<?= e($dialogId) ?>" aria-haspopup="dialog">
                             <?php if ($image): ?>
                                 <img class="dish__photo" src="<?= e($image) ?>" alt="" width="72" height="72" loading="lazy">
@@ -35,6 +34,7 @@
 
                             <span class="dish__text">
                                 <span class="dish__name"><?= e($dish['name']) ?></span>
+                                <span class="dish__price"><?= e(format_price((int) $dish['price_cents'])) ?></span>
                                 <?php if ($dish['allergens']): ?>
                                     <span class="allergens">
                                         <?php foreach ($dish['allergens'] as $allergen): ?>
@@ -75,7 +75,7 @@
                                     </ul>
                                 <?php endif; ?>
 
-                                <!-- (passo 5: prezzo e bottone "aggiungi" anche qui) -->
+                                <p class="dish-dialog__price"><?= e(format_price((int) $dish['price_cents'])) ?></p>
                             </div>
                         </dialog>
                     </li>

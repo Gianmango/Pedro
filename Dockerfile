@@ -13,5 +13,7 @@ RUN apk add --no-cache libpq freetype libjpeg-turbo libpng \
 
 WORKDIR /var/www
 COPY . .
+RUN mkdir -p /var/www/storage/uploads \
+    && chown www-data:www-data /var/www/storage/uploads
 
-CMD ["php-fpm", "-F"]
+CMD ["sh", "-c", "chown www-data:www-data /var/www/storage/uploads && exec php-fpm -F"]

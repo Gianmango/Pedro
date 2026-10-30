@@ -8,6 +8,7 @@ use App\Controllers\MediaController;
 use App\Controllers\MenuController;
 use App\Database\Connection;
 use App\Router;
+use App\Controllers\AdminTableController;
 
 // Qui si decide quale codice risponde a quale URL.
 // Formato: $router->get('/percorso', [NomeController::class, 'metodo']);
@@ -26,6 +27,12 @@ return function (Router $router): void {
 
     $router->get('/admin',        [AdminController::class, 'index']);
     $router->get('/admin/tables', [AdminController::class, 'tables']);
+    $router->post('/admin/tables', [AdminController::class, 'addTables']);
+    // Ordini al tavolo
+    $router->get('/admin/tables/{number}',        [AdminTableController::class, 'show']);
+    $router->post('/admin/tables/{number}/items', [AdminTableController::class, 'change']);
+    $router->post('/admin/tables/{number}/pay',   [AdminTableController::class, 'pay']);
+
 
     $router->get('/admin/menu',              [AdminMenuController::class, 'index']);
     $router->get('/admin/menu/new',          [AdminMenuController::class, 'create']);
@@ -33,6 +40,8 @@ return function (Router $router): void {
     $router->get('/admin/menu/{id}/edit',    [AdminMenuController::class, 'edit']);
     $router->post('/admin/menu/{id}',        [AdminMenuController::class, 'update']);
     $router->post('/admin/menu/{id}/delete', [AdminMenuController::class, 'destroy']);
+
+    
 
     // Controllo rapido che PHP riesca a parlare con il database.
     // Apri /health: devi vedere {"status":"ok"}

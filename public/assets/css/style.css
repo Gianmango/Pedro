@@ -110,6 +110,7 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
 
 .dish__text { display: flex; flex-direction: column; gap: .3rem; min-width: 0; }
 .dish__name { font-size: 1.05rem; font-weight: 600; }
+.dish__price { color: #3f5b3a; font-weight: 600; }
 
 /* ---------- Allergeni ---------- */
 .allergens { display: flex; flex-wrap: wrap; gap: .25rem; }
@@ -163,6 +164,7 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
 .dish-dialog__body { padding: 1rem 1.1rem 1.3rem; }
 .dish-dialog__body h3 { margin: 0 0 .4rem; font-size: 1.3rem; }
 .dish-dialog__desc { margin: 0; color: #555; }
+.dish-dialog__price { margin: .8rem 0 0; color: #3f5b3a; font-size: 1.1rem; font-weight: 700; }
 
 .allergen-list { display: grid; gap: .5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
 .allergen-list li { display: flex; align-items: center; gap: .6rem; }
@@ -319,6 +321,7 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
 .form fieldset { margin: 0; padding: .8rem 1rem 1rem; border: 1px solid #e0d8c5; border-radius: 10px; }
 .form legend { padding: 0 .4rem; font-weight: 700; color: #3f5b3a; }
 .form__actions { display: flex; gap: .6rem; }
+.table-create { max-width: 480px; margin-bottom: 1.5rem; }
 .field-error { color: #b3261e; font-size: .85rem; font-weight: 600; }
 
 .checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .5rem; }
