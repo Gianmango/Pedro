@@ -22,7 +22,7 @@ final class AdminTableController extends AdminBaseController
 
         view('admin/table', [
             'table' => $table,
-            'menu'  => Dish::menuByCategory(true),
+            'menu'  => Dish::menuByCategory(),
             'cart'  => Order::cartLines($tableId),
             'sent'  => Order::inProgressOrders($tableId),
             'total' => Order::tableTotal($tableId),

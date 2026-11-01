@@ -16,16 +16,13 @@ final class Dish
      *
      * @return array<int, array{name:string, dishes:array<int, array<string,mixed>>}>
      */
-    public static function menuByCategory(bool $onlyAvailable = true): array
+    public static function menuByCategory(): array
     {
         $pdo   = Connection::get();
-        $where = $onlyAvailable ? 'WHERE d.is_available = TRUE' : '';
-
         $allergenSql = "SELECT da.dish_id, a.code, a.name, a.icon
                         FROM dish_allergens da
                         JOIN allergens a ON a.id = da.allergen_id
                         JOIN dishes d    ON d.id = da.dish_id
-                        {$where}
                         ORDER BY a.sort_order";
 
         $allergensByDish = [];
@@ -34,10 +31,9 @@ final class Dish
         }
 
         $dishSql = "SELECT c.id AS category_id, c.name AS category_name,
-                           d.id, d.name, d.description, d.price_cents, d.image_path, d.is_available
+                           d.id, d.name, d.description, d.price_cents, d.image_path
                     FROM dishes d
                     JOIN categories c ON c.id = d.category_id
-                    {$where}
                     ORDER BY c.sort_order, c.id, d.name";
 
         $menu = [];
@@ -90,8 +86,8 @@ final class Dish
         $pdo->beginTransaction();
         try {
             $stmt = $pdo->prepare(
-                'INSERT INTO dishes (category_id, name, description, price_cents, image_path, is_available)
-                 VALUES (:category_id, :name, :description, :price_cents, :image_path, :is_available)
+                'INSERT INTO dishes (category_id, name, description, price_cents, image_path)
+                 VALUES (:category_id, :name, :description, :price_cents, :image_path)
                  RETURNING id'
             );
             self::bindDish($stmt, $data);
@@ -152,7 +148,6 @@ final class Dish
         $stmt->bindValue(':description', $d['description'], PDO::PARAM_STR);
         $stmt->bindValue(':price_cents', $d['price_cents'], PDO::PARAM_INT);
         $stmt->bindValue(':image_path', $d['image_path'], $d['image_path'] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
-        $stmt->bindValue(':is_available', (bool) $d['is_available'], PDO::PARAM_BOOL);
     }
 
     /** @param int[] $allergenIds */

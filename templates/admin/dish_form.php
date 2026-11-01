@@ -76,11 +76,6 @@ $currentPhoto = dish_image_url($dish['image_path'] ?? null);
         </label>
     </fieldset>
 
-    <label class="check">
-        <input type="checkbox" name="is_available" value="1" <?= $dish['is_available'] ? 'checked' : '' ?>>
-        Disponibile (visibile ai clienti)
-    </label>
-
     <div class="form__actions">
         <button class="btn btn--primary">Salva</button>
         <a class="btn" href="/admin/menu">Annulla</a>

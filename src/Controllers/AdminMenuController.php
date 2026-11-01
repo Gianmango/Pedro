@@ -17,7 +17,7 @@ final class AdminMenuController extends AdminBaseController
 {
     public function index(): void
     {
-        view('admin/menu', ['menu' => Dish::menuByCategory(false)]);
+        view('admin/menu', ['menu' => Dish::menuByCategory()]);
     }
 
     public function create(): void

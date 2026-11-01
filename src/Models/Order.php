@@ -127,9 +127,6 @@ final class Order
                         if ($dish === null) {
                             throw new DomainException('Questo piatto non è più nel menù.');
                         }
-                        if (!$dish['is_available']) {
-                            throw new DomainException('«' . $dish['name'] . '» non è disponibile.');
-                        }
                     }
 
                     if ($line !== null) {

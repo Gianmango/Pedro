@@ -10,7 +10,7 @@
 </head>
 <body class="admin">
 <header class="admin-bar">
-    <a class="admin-bar__brand" href="/admin">Admin</a>
+    <a class="admin-bar__brand" href="/admin">Pedro</a>
     <?php if (\App\Auth::check()): ?>
         <nav aria-label="Navigazione admin">
             <a href="/admin/tables" class="<?= ($active ?? '') === 'tables' ? 'is-active' : '' ?>">Tavoli</a>

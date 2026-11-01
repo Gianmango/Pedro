@@ -13,8 +13,7 @@ CREATE TABLE dishes (
     name          VARCHAR(150) NOT NULL,
     description   TEXT NOT NULL DEFAULT '',
     price_cents   INTEGER NOT NULL CHECK (price_cents >= 0),
-    image_path    VARCHAR(255),                       -- nome file in storage/uploads/ (passo 8)
-    is_available  BOOLEAN NOT NULL DEFAULT TRUE,      -- "finito" senza cancellare il piatto
+    image_path    VARCHAR(255),                       -- nome file in storage/uploads
     created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX idx_dishes_category ON dishes(category_id);

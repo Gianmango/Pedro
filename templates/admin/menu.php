@@ -16,7 +16,7 @@
         <ul class="admin-dishes">
             <?php foreach ($category['dishes'] as $dish): ?>
                 <?php $image = dish_image_url($dish['image_path']); ?>
-                <li class="admin-dish <?= $dish['is_available'] ? '' : 'admin-dish--hidden' ?>">
+                <li class="admin-dish">
                     <?php if ($image): ?>
                         <img class="dish__photo" src="<?= e($image) ?>" alt="" width="72" height="72" loading="lazy">
                     <?php else: ?>
@@ -26,9 +26,6 @@
                     <div class="admin-dish__info">
                         <strong><?= e($dish['name']) ?></strong>
                         <span><?= e(format_price((int) $dish['price_cents'])) ?></span>
-                        <?php if (!$dish['is_available']): ?>
-                            <span class="badge badge--warn">Nascosto ai clienti</span>
-                        <?php endif; ?>
                         <?php if ($dish['allergens']): ?>
                             <span class="allergens">
                                 <?php foreach ($dish['allergens'] as $allergen): ?>
