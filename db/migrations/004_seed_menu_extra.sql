@@ -20,7 +20,7 @@ WHERE NOT EXISTS (SELECT 1 FROM dishes d WHERE d.name = v.name);
 INSERT INTO dish_allergens (dish_id, allergen_id)
 SELECT d.id, a.id
 FROM (VALUES
-    ('Tagliere di salumi e formaggi', 'milk'),
+    ('Tagliere di salumi e formaggi', 'milk')
 ) AS v(dish_name, allergen_code)
 JOIN dishes d    ON d.name = v.dish_name
 JOIN allergens a ON a.code = v.allergen_code

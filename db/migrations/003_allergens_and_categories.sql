@@ -1,4 +1,4 @@
--- Allergeni (i 14 previsti dalla normativa UE), categorie del menù e tavoli.
+-- Allergeni (i 14 previsti dalla normativa UE) e categorie principali del menù.
 -- NECESSARIO (non sono dati di prova). Si può eseguire più volte senza errori.
 
 CREATE TABLE IF NOT EXISTS allergens (
@@ -56,8 +56,3 @@ UPDATE categories SET sort_order = CASE name
     WHEN 'Alcolici'  THEN 7
     ELSE sort_order
 END;
-
--- Tavoli da 1 a 10 (cambia 10 con il numero di tavoli che avete)
-INSERT INTO tables (number)
-SELECT n FROM generate_series(1, 10) AS n
-ON CONFLICT (number) DO NOTHING;

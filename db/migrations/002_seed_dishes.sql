@@ -16,7 +16,7 @@ WHERE NOT EXISTS (SELECT 1 FROM categories c WHERE c.name = v.name);
 INSERT INTO dishes (category_id, name, description, price_cents)
 SELECT c.id, v.name, v.description, v.price
 FROM (VALUES
-    ('Antipasti', 'Tagliere di salumi e formaggi', 'Salumi e formaggi di produzione propria, con miele e confetture', 1200),
+    ('Antipasti', 'Tagliere di salumi e formaggi', 'Salumi e formaggi di produzione propria, con miele e confetture', 1200)
 ) AS v(category, name, description, price)
 JOIN categories c ON c.name = v.category
 WHERE NOT EXISTS (SELECT 1 FROM dishes d WHERE d.name = v.name);

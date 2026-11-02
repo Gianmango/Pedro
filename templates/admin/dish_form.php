@@ -25,9 +25,18 @@ $currentPhoto = dish_image_url($dish['image_path'] ?? null);
             <select name="category_id" required>
                 <option value="" disabled <?= (int) $dish['category_id'] === 0 ? 'selected' : '' ?>>Scegli…</option>
                 <?php foreach ($categories as $category): ?>
-                    <option value="<?= (int) $category['id'] ?>" <?= (int) $dish['category_id'] === (int) $category['id'] ? 'selected' : '' ?>>
-                        <?= e($category['name']) ?>
-                    </option>
+                    <?php if ($category['parent_id'] === null): ?>
+                        <option value="<?= (int) $category['id'] ?>" <?= (int) $dish['category_id'] === (int) $category['id'] ? 'selected' : '' ?>>
+                            <?= e($category['name']) ?>
+                        </option>
+                        <?php foreach ($categories as $subcategory): ?>
+                            <?php if ((int) $subcategory['parent_id'] === (int) $category['id']): ?>
+                                <option value="<?= (int) $subcategory['id'] ?>" <?= (int) $dish['category_id'] === (int) $subcategory['id'] ? 'selected' : '' ?>>
+                                    — <?= e($category['name']) ?> · <?= e($subcategory['name']) ?>
+                                </option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </select>
             <?php if (isset($errors['category_id'])): ?><span class="field-error"><?= e($errors['category_id']) ?></span><?php endif; ?>
@@ -43,6 +52,14 @@ $currentPhoto = dish_image_url($dish['image_path'] ?? null);
         <textarea name="description" rows="4" maxlength="1000"><?= e($dish['description']) ?></textarea>
         <?php if (isset($errors['description'])): ?><span class="field-error"><?= e($errors['description']) ?></span><?php endif; ?>
     </label>
+
+    <fieldset>
+        <legend>Disponibilità</legend>
+        <label class="check">
+            <input type="checkbox" name="is_available" value="1" <?= !empty($dish['is_available']) ? 'checked' : '' ?>>
+            Disponibile per gli ordini
+        </label>
+    </fieldset>
 
     <fieldset>
         <legend>Allergeni contenuti nel piatto</legend>

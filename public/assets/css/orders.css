@@ -35,7 +35,7 @@
 /* Riga del piatto: [foto + nome + prezzo + allergeni] [− 0 +] */
 .ord-dish { display: flex; align-items: center; gap: .5rem; transition: background-color .15s; }
 .ord-dish .dish__open { flex: 1 1 auto; width: auto; min-width: 0; }
-.ord-dish--active { background: #f1f6ee; }
+.ord-dish--active { background: #f7ecee; }
 .ord-price { color: #4f1422; font-weight: 600; }
 .ord-price--big { margin: 0 0 .5rem; font-size: 1.2rem; }
 
@@ -123,3 +123,44 @@
 }
 .ord-bar strong:nth-child(2) { font-size: 1.2rem; }
 @media (min-width: 900px) { .ord-bar { display: none; } }
+
+/* ---------- Note sulle righe del carrello ---------- */
+.ord-line .ord-note { grid-column: 1 / -1; }
+.ord-note-btn {
+    max-width: 100%;
+    padding: .25rem .1rem;
+    border: 0;
+    background: none;
+    color: #4f1422;
+    font: inherit;
+    font-size: .9rem;
+    text-align: left;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+}
+.ord-note-btn--has { color: #8a4b0f; font-style: italic; }
+.ord-note-form { display: flex; flex-wrap: wrap; gap: .4rem; }
+.ord-note-input {
+    flex: 1 1 10rem;
+    min-width: 0;
+    padding: .55rem .6rem;
+    border: 1px solid #cfc6b0;
+    border-radius: 8px;
+    font: inherit;
+}
+.ord-note-save, .ord-note-cancel {
+    padding: .5rem .8rem;
+    border: 1px solid #4f1422;
+    border-radius: 8px;
+    background: #4f1422;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+}
+.ord-note-cancel { background: #fff; color: #4f1422; }
+.ord-note-text { color: #8a4b0f; }
+
+/* ---------- Invio in cucina e ristampa ---------- */
+.ord-send { margin-top: 1rem; }
+.ord-pay { border: 1px solid #4f1422; background: #fff; color: #4f1422; }
+.ord-reprint { margin: .3rem 0 .2rem; padding: .45rem .8rem; font-size: .9rem; }

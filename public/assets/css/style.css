@@ -68,6 +68,8 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
     border-bottom: 2px solid #4f1422;
     color: #4f1422;
 }
+.category--subcategory { margin-left: 1rem; }
+.category--subcategory h2 { font-size: 1.15rem; border-bottom-width: 1px; }
 
 .dish-list { list-style: none; margin: 0; padding: 0; }
 .dish { border-bottom: 1px solid #e6e0d4; }
@@ -189,7 +191,7 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
 .admin-bar nav a {
     padding: .4rem .8rem;
     border-radius: 8px;
-    color: #e8efe5;
+    color: #f0e5e7;
     text-decoration: none;
 }
 .admin-bar nav a.is-active { background: rgb(255 255 255 / .18); color: #fff; font-weight: 600; }
@@ -198,7 +200,7 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
     padding: .4rem;
     border: 0;
     background: none;
-    color: #e8efe5;
+    color: #f0e5e7;
     font: inherit;
     text-decoration: underline;
     cursor: pointer;
@@ -220,7 +222,7 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
 .page-head h1, .page-head p { margin: 0; }
 
 .flash { margin: 0 0 1rem; padding: .7rem 1rem; border-radius: 10px; }
-.flash--ok    { background: #e3f1de; color: #370808; }
+.flash--ok    { background: #f4e3e5; color: #4f1422; }
 .flash--error { background: #fbe4e1; color: #7a1d12; }
 
 /* Bottoni */
@@ -277,6 +279,20 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
 .table-card__total { margin: 0 0 .4rem; font-size: 1.6rem; font-weight: 700; }
 .table-card__free { margin: 0; color: #888; }
 .table-card summary { cursor: pointer; color: #4f1422; font-weight: 600; }
+.search-bar { display: grid; gap: .35rem; max-width: 480px; margin: 0 0 1rem; }
+.search-bar label { font-weight: 600; }
+.admin [hidden] { display: none !important; }
+.search-bar input {
+    width: 100%;
+    padding: .6rem .7rem;
+    border: 1px solid #cfc6b0;
+    border-radius: 8px;
+    background: #fff;
+    color: inherit;
+    font: inherit;
+    font-size: 1rem;
+}
+.search-bar input:focus-visible { outline: 2px solid #4f1422; outline-offset: 2px; }
 .order { margin-top: .7rem; padding-top: .6rem; border-top: 1px dashed #d9d1bf; }
 .order__head { margin: 0 0 .3rem; font-size: .85rem; color: #555; }
 .order ul { margin: 0; padding: 0; list-style: none; }
@@ -285,6 +301,10 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
 /* Elenco piatti admin */
 .admin-category { margin-bottom: 1.5rem; }
 .admin-category h2 { margin: 1rem 0 .25rem; padding-bottom: .25rem; border-bottom: 2px solid #4f1422; }
+.admin-category--subcategory { margin-left: 1rem; }
+.admin-category--subcategory h2 { font-size: 1.15rem; border-bottom-width: 1px; }
+.admin-category--unavailable { margin-top: 2rem; }
+.admin-category--unavailable h2 { border-bottom-color: #9a6b22; }
 .admin-dishes { margin: 0; padding: 0; list-style: none; }
 .admin-dish { display: flex; align-items: center; gap: .8rem; padding: .7rem 0; border-bottom: 1px solid #e6e0d4; }
 .admin-dish--hidden { opacity: .65; }
@@ -330,3 +350,12 @@ main { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
 
 .photo-current { display: flex; align-items: center; gap: 1rem; margin-bottom: .8rem; }
 .photo-current img { border-radius: 10px; object-fit: cover; }
+
+.category-admin-list { margin: 0; padding: 0; list-style: none; }
+.category-admin-item { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; padding: .7rem 0; border-bottom: 1px solid #e6e0d4; }
+.category-admin-item form:first-child { display: flex; flex: 1 1 400px; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.category-admin-item form:first-child label { flex: 1 1 180px; }
+.category-admin-item form { margin: 0; }
+.delivery-new { margin-bottom: 1.5rem; }
+.delivery-created h2 { margin-top: 1.5rem; }
+.table-card h3 { margin: 0 0 .4rem; color: #4f1422; }

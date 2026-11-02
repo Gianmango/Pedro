@@ -1,3 +1,5 @@
 # Gestione dell’agriturismo
 
-Applicazione per gestire in locale i tavoli e gli ordini dell’agriturismo. Permette di inviare gli ordini alla stampante e di visualizzare il conto di ciascun tavolo.
+Applicazione per gestire i tavoli, le spedizioni e gli ordini dell’agriturismo. Permette di inviare gli ordini alla stampante, gestire le categorie e la disponibilità dei piatti, e visualizzare i conti aperti.
+
+Per un database già esistente, applicare le migrazioni in `db/migrations` nell’ordine numerico. La migrazione `006_categories_availability_delivery.sql` aggiunge le sottocategorie, la disponibilità dei piatti e la distinzione tra tavoli e spedizioni.

@@ -10,15 +10,37 @@ use PDOStatement;
 final class Dish
 {
     /**
-     * Piatti raggruppati per categoria, ognuno con la lista 'allergens'.
+     * Categorie ordinate gerarchicamente, con i relativi piatti e allergeni.
      * $onlyAvailable = true  -> menù dei clienti (solo piatti disponibili)
      * $onlyAvailable = false -> area admin (anche quelli nascosti)
      *
-     * @return array<int, array{name:string, dishes:array<int, array<string,mixed>>}>
+     * @return array<int, array{id:int, name:string, parent_id:?int, dishes:array<int, array<string,mixed>>}>
      */
-    public static function menuByCategory(): array
+    public static function menuByCategory(bool $onlyAvailable = false): array
     {
         $pdo   = Connection::get();
+        $categoryRows = $pdo->query(
+            'SELECT id, name, parent_id
+             FROM categories
+             ORDER BY
+                CASE WHEN parent_id IS NULL THEN sort_order
+                     ELSE (SELECT sort_order FROM categories p WHERE p.id = categories.parent_id)
+                END,
+                CASE WHEN parent_id IS NULL THEN 0 ELSE 1 END,
+                sort_order, id'
+        )->fetchAll();
+
+        $menu = [];
+        foreach ($categoryRows as $category) {
+            $id = (int) $category['id'];
+            $menu[$id] = [
+                'id' => $id,
+                'name' => (string) $category['name'],
+                'parent_id' => $category['parent_id'] === null ? null : (int) $category['parent_id'],
+                'dishes' => [],
+            ];
+        }
+
         $allergenSql = "SELECT da.dish_id, a.code, a.name, a.icon
                         FROM dish_allergens da
                         JOIN allergens a ON a.id = da.allergen_id
@@ -30,18 +52,18 @@ final class Dish
             $allergensByDish[(int) $row['dish_id']][] = $row;
         }
 
-        $dishSql = "SELECT c.id AS category_id, c.name AS category_name,
-                           d.id, d.name, d.description, d.price_cents, d.image_path
+        $dishSql = "SELECT c.id AS category_id,
+                           d.id, d.name, d.description, d.price_cents, d.image_path, d.is_available
                     FROM dishes d
                     JOIN categories c ON c.id = d.category_id
+                    " . ($onlyAvailable ? 'WHERE d.is_available = TRUE' : '') . "
                     ORDER BY c.sort_order, c.id, d.name";
 
-        $menu = [];
         foreach ($pdo->query($dishSql)->fetchAll() as $row) {
             $categoryId = (int) $row['category_id'];
+            $row['is_available'] = self::booleanValue($row['is_available']);
             $row['allergens'] = $allergensByDish[(int) $row['id']] ?? [];
 
-            $menu[$categoryId]['name'] = $row['category_name'];
             $menu[$categoryId]['dishes'][] = $row;
         }
 
@@ -54,6 +76,9 @@ final class Dish
         $stmt = Connection::get()->prepare('SELECT * FROM dishes WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $row = $stmt->fetch();
+        if ($row) {
+            $row['is_available'] = self::booleanValue($row['is_available']);
+        }
 
         return $row ?: null;
     }
@@ -86,8 +111,8 @@ final class Dish
         $pdo->beginTransaction();
         try {
             $stmt = $pdo->prepare(
-                'INSERT INTO dishes (category_id, name, description, price_cents, image_path)
-                 VALUES (:category_id, :name, :description, :price_cents, :image_path)
+                'INSERT INTO dishes (category_id, name, description, price_cents, image_path, is_available)
+                 VALUES (:category_id, :name, :description, :price_cents, :image_path, :is_available)
                  RETURNING id'
             );
             self::bindDish($stmt, $data);
@@ -148,6 +173,12 @@ final class Dish
         $stmt->bindValue(':description', $d['description'], PDO::PARAM_STR);
         $stmt->bindValue(':price_cents', $d['price_cents'], PDO::PARAM_INT);
         $stmt->bindValue(':image_path', $d['image_path'], $d['image_path'] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        $stmt->bindValue(':is_available', $d['is_available'], PDO::PARAM_BOOL);
+    }
+
+    private static function booleanValue(mixed $value): bool
+    {
+        return $value === true || $value === 1 || $value === '1' || $value === 't' || $value === 'true';
     }
 
     /** @param int[] $allergenIds */

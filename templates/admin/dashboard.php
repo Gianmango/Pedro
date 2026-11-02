@@ -8,6 +8,11 @@
         <span class="tile__title">Visualizza tavoli</span>
         <span class="tile__sub">Conti aperti e ordini di ogni tavolo</span>
     </a>
+    <a class="tile" href="/admin/deliveries">
+        <span class="tile__icon" aria-hidden="true">🛵</span>
+        <span class="tile__title">Spedizioni</span>
+        <span class="tile__sub">Crea e gestisci gli ordini da consegnare</span>
+    </a>
     <a class="tile" href="/admin/menu">
         <span class="tile__icon" aria-hidden="true">📋</span>
         <span class="tile__title">Modifica menù</span>

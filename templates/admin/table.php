@@ -1,33 +1,40 @@
 <?php
-$title  = 'Tavolo ' . $table['number'];
-$active = 'tables';
+$entity = $table['is_delivery'] ? 'Spedizione' : 'Tavolo';
+$entityName = $table['label'] ?: (string) $table['number'];
+$title = $entity . ' ' . $entityName;
+$active = $table['is_delivery'] ? 'deliveries' : 'tables';
 require base_path('templates/admin/partials/header.php');
 
 $number = (int) $table['number'];
+$cart   = $state['cart'];
+$total  = (int) $state['total_cents'];
+$sendUrl = $orderOnly ? $baseUrl . '/order/send' : $baseUrl . '/send';
 
-// Quante porzioni di ogni piatto ci sono già nel carrello
+// Quante porzioni di ogni piatto ci sono già nel carrello (somma di tutte le righe, note comprese)
 $qtyByDish = [];
 $cartCount = 0;
 foreach ($cart as $line) {
     $cartCount += $line['quantity'];
     if ($line['dish_id'] !== null) {
-        $qtyByDish[$line['dish_id']] = $line['quantity'];
+        $qtyByDish[$line['dish_id']] = ($qtyByDish[$line['dish_id']] ?? 0) + $line['quantity'];
     }
 }
 ?>
 
 <div data-order-root
-     data-items-url="/admin/tables/<?= $number ?>/items"
+     data-items-url="<?= e($baseUrl) ?>/items"
+     data-note-url="<?= e($baseUrl) ?>/note"
      data-csrf="<?= e(csrf_token()) ?>">
 
     <div class="ord-head">
-        <a class="ord-back" href="/admin/tables">← Tutti i tavoli</a>
-        <h1>Tavolo <?= $number ?>
-            <?php if (!empty($table['label'])): ?><small><?= e($table['label']) ?></small><?php endif; ?>
-        </h1>
+        <a class="ord-back" href="<?= e($backUrl) ?>">← <?= $table['is_delivery'] ? 'Tutte le spedizioni' : 'Tutti i tavoli' ?></a>
+        <h1><?= e($entity) ?> <?= e($entityName) ?></h1>
     </div>
 
     <p class="flash flash--error" data-error role="alert" hidden></p>
+
+    <!-- Stato iniziale del carrello: order.js lo disegna e poi lo aggiorna dopo ogni tocco -->
+    <script type="application/json" data-initial-state><?= json_encode($state, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?></script>
 
     <div class="ord-layout">
 
@@ -44,7 +51,8 @@ foreach ($cart as $line) {
                 </nav>
 
                 <?php foreach ($menu as $categoryId => $category): ?>
-                    <section class="category" id="cat-<?= (int) $categoryId ?>">
+                    <section class="category <?= $category['parent_id'] !== null ? 'category--subcategory' : '' ?>"
+                             id="cat-<?= (int) $categoryId ?>">
                         <h2><?= e($category['name']) ?></h2>
 
                         <ul class="dish-list">
@@ -131,22 +139,10 @@ foreach ($cart as $line) {
         </section>
 
         <!-- ================= Carrello e conto ================= -->
-        <aside class="ord-cart" id="ord-cart" aria-label="Carrello del tavolo">
+        <aside class="ord-cart" id="ord-cart" aria-label="Carrello">
             <h2>Carrello</h2>
 
-            <ul class="ord-lines" data-cart-list>
-                <?php foreach ($cart as $line): ?>
-                    <li class="ord-line">
-                        <span class="ord-line__name"><?= e($line['name']) ?></span>
-                        <span class="ord-stepper" data-item="<?= (int) $line['item_id'] ?>">
-                            <button type="button" class="ord-btn" data-delta="-1" aria-label="Togli una porzione di <?= e($line['name']) ?>">−</button>
-                            <span class="ord-qty"><?= (int) $line['quantity'] ?></span>
-                            <button type="button" class="ord-btn ord-btn--plus" data-delta="1" aria-label="Aggiungi una porzione di <?= e($line['name']) ?>">+</button>
-                        </span>
-                        <span class="ord-line__price"><?= e(format_price($line['line_cents'])) ?></span>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+            <ul class="ord-lines" data-cart-list></ul>
             <p class="ord-empty" data-cart-empty <?= $cart ? 'hidden' : '' ?>>Il carrello è vuoto: tocca <strong>+</strong> sui piatti del menù.</p>
 
             <?php if ($sent): ?>
@@ -160,26 +156,43 @@ foreach ($cart as $line) {
                         <ul class="ord-sent__items">
                             <?php foreach ($order['items'] as $item): ?>
                                 <li>
-                                    <span><?= (int) $item['quantity'] ?>× <?= e($item['dish_name']) ?></span>
+                                    <span>
+                                        <?= (int) $item['quantity'] ?>× <?= e($item['dish_name']) ?>
+                                        <?php if ($item['notes'] !== ''): ?><em class="ord-note-text">(<?= e($item['notes']) ?>)</em><?php endif; ?>
+                                    </span>
                                     <span><?= e(format_price((int) $item['unit_price_cents'] * (int) $item['quantity'])) ?></span>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
+                        <form method="post" action="<?= e($baseUrl) ?>/orders/<?= (int) $order['id'] ?>/reprint">
+                            <?= csrf_field() ?>
+                            <button class="btn ord-reprint">Ristampa biglietto</button>
+                        </form>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
 
+            <form method="post" action="<?= e($sendUrl) ?>" class="ord-send"
+                  data-confirm="<?= e('Inviare in cucina l\'ordine ' . $entityName . '? Verrà stampato il biglietto.') ?>">
+                <?= csrf_field() ?>
+                <button class="btn btn--primary ord-block" data-send <?= $cart ? '' : 'disabled' ?>>🖨 Invia in cucina</button>
+            </form>
+
             <div class="ord-total">
-                <span>Totale tavolo</span>
+                <span>Totale <?= strtolower($entity) ?></span>
                 <strong data-total><?= e(format_price($total)) ?></strong>
             </div>
 
-            <form method="post" action="/admin/tables/<?= $number ?>/pay"
-                  data-confirm="<?= e('Segnare il conto del tavolo ' . $number . ' come pagato? Il carrello verrà azzerato.') ?>">
-                <?= csrf_field() ?>
-                <button class="btn btn--primary ord-block" data-pay <?= $total > 0 ? '' : 'disabled' ?>>Segna come pagato</button>
-            </form>
-            <p class="muted ord-hint">Il tavolo torna libero e il conto riparte da zero.</p>
+            <?php if (!$orderOnly): ?>
+                <form method="post" action="<?= e($baseUrl) ?>/pay"
+                      data-confirm="<?= e('Segnare il conto ' . $entityName . ' come pagato? Il tavolo/spedizione verrà rimosso.') ?>">
+                    <?= csrf_field() ?>
+                    <button class="btn ord-block ord-pay" data-pay <?= $total > 0 ? '' : 'disabled' ?>><?= $table['is_delivery'] ? "Chiudi l'ordine" : 'Chiudi il tavolo' ?></button>
+                </form>
+                <p class="muted ord-hint">Alla chiusura del conto <?= strtolower($entity) ?> viene rimosso dall'elenco.</p>
+            <?php else: ?>
+                <p class="muted ord-hint">Questa schermata serve solo a inserire il nuovo ordine: il pagamento è disponibile nella schermata degli ordini creati.</p>
+            <?php endif; ?>
         </aside>
     </div>
 

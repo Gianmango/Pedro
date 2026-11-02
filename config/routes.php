@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Controllers\AdminController;
 use App\Controllers\AdminAccountController;
 use App\Controllers\AdminMenuController;
+use App\Controllers\AdminCategoryController;
 use App\Controllers\AuthController;
 use App\Controllers\MediaController;
 use App\Database\Connection;
@@ -30,12 +31,29 @@ return function (Router $router): void {
     $router->get('/admin/account', [AdminAccountController::class, 'edit']);
     $router->post('/admin/account', [AdminAccountController::class, 'update']);
     $router->get('/admin/tables', [AdminController::class, 'tables']);
-    $router->post('/admin/tables', [AdminController::class, 'addTables']);
     // Ordini al tavolo
+    $router->get('/admin/tables/new', [AdminTableController::class, 'newTable']);
+    $router->post('/admin/tables/new', [AdminTableController::class, 'createTable']);
+    $router->get('/admin/tables/{number}/order', [AdminTableController::class, 'newOrder']);
+    $router->post('/admin/tables/{number}/order/send', [AdminTableController::class, 'sendNewOrder']);
     $router->get('/admin/tables/{number}',        [AdminTableController::class, 'show']);
     $router->post('/admin/tables/{number}/items', [AdminTableController::class, 'change']);
     $router->post('/admin/tables/{number}/pay',   [AdminTableController::class, 'pay']);
+    $router->post('/admin/tables/{number}/note', [AdminTableController::class, 'note']);
+    $router->post('/admin/tables/{number}/send', [AdminTableController::class, 'send']);
+    $router->post('/admin/tables/{number}/orders/{order}/reprint', [AdminTableController::class, 'reprint']);
 
+    // Spedizioni
+    $router->get('/admin/deliveries', [AdminTableController::class, 'deliveries']);
+    $router->post('/admin/deliveries', [AdminTableController::class, 'createDelivery']);
+    $router->get('/admin/deliveries/{number}/order', [AdminTableController::class, 'newDeliveryOrder']);
+    $router->post('/admin/deliveries/{number}/order/send', [AdminTableController::class, 'sendNewOrder']);
+    $router->get('/admin/deliveries/{number}', [AdminTableController::class, 'showDelivery']);
+    $router->post('/admin/deliveries/{number}/items', [AdminTableController::class, 'change']);
+    $router->post('/admin/deliveries/{number}/note', [AdminTableController::class, 'note']);
+    $router->post('/admin/deliveries/{number}/send', [AdminTableController::class, 'send']);
+    $router->post('/admin/deliveries/{number}/pay', [AdminTableController::class, 'pay']);
+    $router->post('/admin/deliveries/{number}/orders/{order}/reprint', [AdminTableController::class, 'reprint']);
 
     $router->get('/admin/menu',              [AdminMenuController::class, 'index']);
     $router->get('/admin/menu/new',          [AdminMenuController::class, 'create']);
@@ -43,8 +61,10 @@ return function (Router $router): void {
     $router->get('/admin/menu/{id}/edit',    [AdminMenuController::class, 'edit']);
     $router->post('/admin/menu/{id}',        [AdminMenuController::class, 'update']);
     $router->post('/admin/menu/{id}/delete', [AdminMenuController::class, 'destroy']);
-
-    
+    $router->get('/admin/categories', [AdminCategoryController::class, 'index']);
+    $router->post('/admin/categories', [AdminCategoryController::class, 'store']);
+    $router->post('/admin/categories/{id}', [AdminCategoryController::class, 'rename']);
+    $router->post('/admin/categories/{id}/delete', [AdminCategoryController::class, 'destroy']);
 
     // Controllo rapido che PHP riesca a parlare con il database.
     // Apri /health: devi vedere {"status":"ok"}
