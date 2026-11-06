@@ -10,3 +10,6 @@ docker compose up --build -d
 docker compose exec php php bin/create-admin.php NOMEADMIN
 
 cambia avvia pedro per matchare il sistema
+
+(usa ipconfig per l'IP)
+http://IPV480:80

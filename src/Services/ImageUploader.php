@@ -8,7 +8,7 @@ use RuntimeException;
 /** Salva le foto dei piatti in storage/uploads/ con un nome casuale. */
 final class ImageUploader
 {
-    public const MAX_BYTES = 8 * 1024 * 1024;
+    public const MAX_BYTES = 50 * 1024 * 1024;
 
     /** Tipi accettati (riconosciuti dal CONTENUTO del file, non dal nome). */
     private const TYPES = [
@@ -30,7 +30,7 @@ final class ImageUploader
             throw new RuntimeException('Caricamento della foto non valido.');
         }
         if ($error === UPLOAD_ERR_INI_SIZE || $error === UPLOAD_ERR_FORM_SIZE) {
-            throw new RuntimeException('La foto è troppo grande (massimo 8 MB).');
+            throw new RuntimeException('La foto è troppo grande (massimo 50 MB).');
         }
         if ($error !== UPLOAD_ERR_OK) {
             throw new RuntimeException('Caricamento della foto non riuscito, riprova.');
